@@ -3,11 +3,10 @@
 namespace Nip\Records\Filters\Tests;
 
 use Nip\Database\Query\Select;
+use Nip\Http\Request;
 use Nip\Records\Filters\AbstractFilter;
 use Nip\Records\Filters\FilterManager;
 use Nip\Records\Filters\Sessions\Session;
-use Nip\Records\Tests\AbstractTest;
-use Nip\Http\Request;
 
 /**
  * Class FilterManagerTest

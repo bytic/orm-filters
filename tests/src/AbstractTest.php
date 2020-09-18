@@ -1,6 +1,6 @@
 <?php
 
-namespace Nip\Records\Tests;
+namespace Nip\Records\Filters\Tests;
 
 use Mockery as m;
 use PHPUnit\Framework\TestCase;

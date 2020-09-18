@@ -10,7 +10,7 @@ use Nip\Http\Request;
  * Class BasicFilterTest
  * @package Nip\Records\Filters\Tests\Column
  */
-class BasicFilterTest extends \Nip\Records\Tests\AbstractTest
+class BasicFilterTest extends \Nip\Records\Filters\Tests\AbstractTest
 {
     /**
      * @var \UnitTester
