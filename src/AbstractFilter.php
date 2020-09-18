@@ -185,4 +185,15 @@ abstract class AbstractFilter implements FilterInterface
         }
         return trim(stripslashes(htmlentities($value, ENT_QUOTES, 'UTF-8')));
     }
+
+    /**
+     * @return |null
+     */
+    public function __toString()
+    {
+        if ($this->isActive() == false) {
+            return '';
+        }
+        return $this->getValue();
+    }
 }

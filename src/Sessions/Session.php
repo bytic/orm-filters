@@ -2,20 +2,19 @@
 
 namespace Nip\Records\Filters\Sessions;
 
-use Nip\Records\Filters\Sessions\Traits\HasFiltersArrayTrait;
-use Nip\Records\Filters\Sessions\Traits\HasFiltersTrait;
-use Nip\Records\Filters\Sessions\Traits\HasQueryTrait;
+use ArrayAccess;
 use Nip\Http\Request;
 
 /**
  * Class Session
  * @package Nip\Records\Filters\Sessions
  */
-class Session
+class Session implements ArrayAccess
 {
-    use HasFiltersArrayTrait;
-    use HasFiltersTrait;
-    use HasQueryTrait;
+    use Traits\ArrayAccessTrait;
+    use Traits\HasFiltersArrayTrait;
+    use Traits\HasFiltersTrait;
+    use Traits\HasQueryTrait;
 
     protected $name;
 

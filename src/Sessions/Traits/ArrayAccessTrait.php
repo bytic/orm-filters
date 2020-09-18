@@ -1,0 +1,57 @@
+<?php
+
+namespace Nip\Records\Filters\Sessions\Traits;
+
+/**
+ * Trait ArrayAccessTrait
+ * @package Nip\Records\Filters\Sessions\Traits
+ */
+trait ArrayAccessTrait
+{
+
+    /**
+     * Determine if the given configuration option exists.
+     *
+     * @param  string $key
+     * @return bool
+     */
+    public function offsetExists($key)
+    {
+        return isset($this->filters[$key]) || array_key_exists($key, $this->filters);
+    }
+
+    /**
+     * Get a configuration option.
+     *
+     * @param  string $key
+     * @return mixed
+     */
+    public function offsetGet($key)
+    {
+        return $this->filters[$key];
+    }
+
+    /**
+     * @param  string $key
+     * @param  mixed $value
+     * @return void
+     */
+    public function offsetSet($key, $value)
+    {
+        if (is_null($key)) {
+            $this->filters[] = $value;
+        } else {
+            $this->filters[$key] = $value;
+        }
+    }
+
+    /**
+     * Unset a configuration option.
+     *
+     * @inheritdoc
+     */
+    public function offsetUnset($key)
+    {
+        unset($this->filters[$key]);
+    }
+}

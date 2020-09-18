@@ -4,6 +4,7 @@ namespace Nip\Records\Filters\Sessions\Traits;
 
 use Nip\Records\Filters\AbstractFilter;
 use Nip\Records\Filters\Column\AbstractFilter as AbstractColumnFilter;
+use Nip\Records\Filters\FilterInterface;
 
 /**
  * Trait HasFiltersTrait
@@ -15,6 +16,14 @@ trait HasFiltersTrait
      * @var AbstractFilter[]|AbstractColumnFilter[]
      */
     protected $filters = [];
+
+    /**
+     * @param AbstractFilter|FilterInterface $filter
+     */
+    public function addFilter(FilterInterface $filter)
+    {
+        $this->filters[$filter->getName()] = $filter;
+    }
 
     /**
      * @return AbstractFilter[]|AbstractColumnFilter[]
@@ -31,8 +40,8 @@ trait HasFiltersTrait
     {
         foreach ($filters as $filter) {
             $filter->setSession($this);
+            $this->addFilter($filter);
         }
-        $this->filters = $filters;
     }
 
     public function resetFilters()
