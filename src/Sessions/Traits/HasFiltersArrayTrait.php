@@ -8,10 +8,21 @@ namespace Nip\Records\Filters\Sessions\Traits;
  */
 trait HasFiltersArrayTrait
 {
+    /**
+     * @var null|array
+     */
     protected $filtersArray = null;
 
     /**
-     * @return null
+     * @return array
+     */
+    public function __toArray()
+    {
+        return $this->getFiltersArray();
+    }
+
+    /**
+     * @return array
      */
     public function getFiltersArray()
     {
