@@ -24,6 +24,14 @@ trait HasFiltersArrayTrait
     /**
      * @return array
      */
+    public function toArray()
+    {
+        return $this->getFiltersArray();
+    }
+
+    /**
+     * @return array
+     */
     public function getFiltersArray()
     {
         if ($this->filtersArray === null) {
