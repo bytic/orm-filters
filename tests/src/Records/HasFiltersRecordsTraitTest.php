@@ -5,7 +5,7 @@ namespace Nip\Records\Filters\Tests\Records;
 use Mockery as m;
 use Nip\Http\Request;
 use Nip\Records\Filters\Tests\AbstractTest;
-use Nip\Records\RecordManager as Records;
+use Nip\Records\Filters\Tests\Fixtures\Models\RecordManager as Records;
 
 /**
  * Class HasFiltersRecordsTraitTest
@@ -46,8 +46,7 @@ class HasFiltersRecordsTraitTest extends AbstractTest
     {
         parent::setUp();
 
-        $this->testRecords = m::mock(Records::class)->makePartial()
-            ->shouldReceive('getRequest')->andReturn(Request::create('/'))
-            ->getMock();
+        $this->testRecords = m::mock(Records::class)->makePartial();
+        $this->testRecords->shouldReceive('getRequest')->andReturn(Request::create('/'));
     }
 }

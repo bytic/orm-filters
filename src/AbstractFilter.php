@@ -6,6 +6,7 @@ use Nip\Database\Query\Select;
 use Nip\Records\Filters\Filters\Traits\HasManagerTrait;
 use Nip\Records\Filters\Filters\Traits\HasSessionTrait;
 use Nip\Utility\Traits\HasRequestTrait;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Class AbstractFilter
@@ -99,14 +100,13 @@ abstract class AbstractFilter implements FilterInterface
     {
         $request = $this->getRequest();
         $name = $this->getRequestField();
-        if ($name) {
-            $return = $request->get($name, false);
-            if ($return) {
-                return $return;
-            }
+        if (empty($name)) {
+            return false;
         }
-
-        return false;
+        if (!($request instanceof ServerRequestInterface)) {
+            return false;
+        }
+        return $request->get($name, false);
     }
 
     /**

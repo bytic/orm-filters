@@ -24,11 +24,21 @@ class BasicFilter extends AbstractFilter implements FilterInterface
         $value = $this->getValue();
         if ($this->getDatabaseOperation() == 'LIKE%%') {
             $query->where("{$this->getDbName()} LIKE ?", "%{$value}%");
-        } elseif (is_array($value)) {
-            $query->where("{$this->getDbName()} IN ?", $value);
-        } else {
-            $query->where("{$this->getDbName()} = ?", $this->getValue());
+            return;
         }
+        if (is_array($value)) {
+            $query->where("{$this->getDbName()} IN ?", $value);
+            return;
+        }
+        if ($value == 'ISNULL') {
+            $query->where("{$this->getDbName()} IS NULL");
+            return;
+        }
+        if ($value == 'ISNOTNULL') {
+            $query->where("{$this->getDbName()} IS NOT NULL");
+            return;
+        }
+        $query->where("{$this->getDbName()} = ?", $this->getValue());
     }
 
 

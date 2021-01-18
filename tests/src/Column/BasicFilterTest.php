@@ -100,6 +100,20 @@ class BasicFilterTest extends \Nip\Records\Filters\Tests\AbstractTest
         ];
     }
 
+    public function test_FilterQuery_is_null()
+    {
+        $query = new Select();
+        $query->from('books');
+
+        $filter = new BasicFilter();
+        $filter->setName('type');
+        $filter->setDbName('type');
+        $filter->setValue('ISNULL');
+        $filter->filterQuery($query);
+
+        self::assertSame('SELECT * FROM `books` WHERE type IS NULL', $query->assemble());
+    }
+
     /**
      * @dataProvider filterQueryForArrayProvider
      */

@@ -18,6 +18,7 @@ class SessionTest extends AbstractTest
         $session->addFilter((new BasicFilter())->setField('t1'));
         $session->addFilter((new BasicFilter())->setField('t2'));
 
+        self::assertSame([], $session->toArray());
         self::assertSame([], (array) $session);
     }
 }

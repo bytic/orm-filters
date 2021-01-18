@@ -2,14 +2,14 @@
 
 namespace Nip\Records\Filters\Sessions;
 
-use ArrayAccess;
+use ArrayObject;
 use Nip\Http\Request;
 
 /**
  * Class Session
  * @package Nip\Records\Filters\Sessions
  */
-class Session implements ArrayAccess
+class Session extends ArrayObject
 {
     use Traits\ArrayAccessTrait;
     use Traits\HasFiltersArrayTrait;
