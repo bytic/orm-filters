@@ -12,7 +12,6 @@ use Nip\Records\Filters\FilterManager;
  */
 trait HasFiltersRecordsTrait
 {
-
     protected $filterManager = null;
 
     /**
@@ -115,5 +114,18 @@ trait HasFiltersRecordsTrait
     public function filterQuery($query)
     {
         return $this->getFilterManager()->filterQuery($query);
+    }
+
+    /**
+     * @param array $filters
+     * @param array $params
+     * @return \Nip\Records\Collections\Collection
+     */
+    public function findByFilters(array $filters, $params = []): \Nip\Records\Collections\Collection
+    {
+        $session = $this->getFilterManager()->createSession($filters, microtime());
+        $query = $this->paramsToQuery($params);
+        $query = $this->getFilterManager()->filterQuery($query, $session->getName());
+        return $this->findByQuery($query);
     }
 }
