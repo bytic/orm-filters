@@ -12,14 +12,12 @@ use Nip\Http\Request;
 class Session extends ArrayObject
 {
     use Traits\ArrayAccessTrait;
+    use Traits\HasDataTrait;
     use Traits\HasFiltersArrayTrait;
     use Traits\HasFiltersTrait;
     use Traits\HasQueryTrait;
 
     protected $name;
-
-    protected $data;
-
     /**
      * @return mixed
      */
@@ -37,28 +35,12 @@ class Session extends ArrayObject
     }
 
     /**
-     * @return mixed
-     */
-    public function getData()
-    {
-        return $this->data;
-    }
-
-    /**
-     * @param mixed $data
-     */
-    public function setData($data)
-    {
-        $this->data = $data;
-    }
-
-    /**
      * @param $data
      */
     public function initWithData($data)
     {
         $this->setData($data);
-        $data = $this->getData();
+//        $data = $this->getData();
         $filters = $this->getFilters();
         foreach ($filters as $filter) {
             if ($data instanceof Request) {

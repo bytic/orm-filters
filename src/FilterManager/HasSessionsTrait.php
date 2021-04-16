@@ -63,11 +63,17 @@ trait HasSessionsTrait
      */
     public function newSessionFromData($data)
     {
-        $session = new Session();
+        $class = $this->getSessionClass();
+        $session = new $class();
         $filters = $this->getClonedFilters();
         $session->setFilters($filters);
         $session->initWithData($data);
         return $session;
+    }
+
+    protected function getSessionClass(): string
+    {
+        return Session::class;
     }
 
     /**
