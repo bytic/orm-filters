@@ -12,10 +12,10 @@ trait ArrayAccessTrait
     /**
      * Determine if the given configuration option exists.
      *
-     * @param  string $key
+     * @param string $key
      * @return bool
      */
-    public function offsetExists($key)
+    public function offsetExists($key): bool
     {
         return isset($this->filters[$key]) || array_key_exists($key, $this->filters);
     }
@@ -23,20 +23,20 @@ trait ArrayAccessTrait
     /**
      * Get a configuration option.
      *
-     * @param  string $key
+     * @param string $key
      * @return mixed
      */
-    public function offsetGet($key)
+    public function offsetGet(mixed $key): mixed
     {
         return $this->filters[$key];
     }
 
     /**
-     * @param  string $key
-     * @param  mixed $value
+     * @param string $key
+     * @param mixed $value
      * @return void
      */
-    public function offsetSet($key, $value)
+    public function offsetSet(mixed $key, mixed $value): void
     {
         if (is_null($key)) {
             $this->filters[] = $value;
@@ -50,7 +50,7 @@ trait ArrayAccessTrait
      *
      * @inheritdoc
      */
-    public function offsetUnset($key)
+    public function offsetUnset(mixed $key): void
     {
         unset($this->filters[$key]);
     }
