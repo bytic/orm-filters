@@ -3,7 +3,8 @@
 namespace Nip\Records\Filters\Sessions;
 
 use ArrayObject;
-use Nip\Http\Request;
+use Psr\Http\Message\ServerRequestInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class Session
@@ -40,12 +41,14 @@ class Session extends ArrayObject
     public function initWithData($data)
     {
         $this->setData($data);
-//        $data = $this->getData();
+        $this->setFiltersArray(null);
         $filters = $this->getFilters();
         foreach ($filters as $filter) {
-            if ($data instanceof Request) {
+            if ($data instanceof Request || $data instanceof ServerRequestInterface) {
                 $filter->setRequest($data);
+                $filter->setValue(null);
             } else {
+                $filter->setRequest(null);
                 $filter->setValue(isset($data[$filter->getName()]) ? $data[$filter->getName()] : false);
             }
         }

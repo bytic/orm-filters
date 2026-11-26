@@ -5,6 +5,8 @@ namespace Nip\Records\Filters\Records;
 use Nip\Database\Query\Select as SelectQuery;
 use Nip\Http\Request;
 use Nip\Records\Filters\FilterManager;
+use Psr\Http\Message\ServerRequestInterface;
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 /**
  * Trait HasFiltersRecordsTrait
@@ -15,15 +17,21 @@ trait HasFiltersRecordsTrait
     protected $filterManager = null;
 
     /**
-     * @param Request|array $request
+     * @param SymfonyRequest|ServerRequestInterface|array $request
      * @return mixed
      */
     public function requestFilters($request)
     {
-        $request = $request instanceof Request ? $request : new Request($request);
-        $this->getFilterManager()->setRequest($request);
+        if (!is_array($request) && !$request instanceof SymfonyRequest && !$request instanceof ServerRequestInterface) {
+            throw new \InvalidArgumentException('Expected an array or a server request.');
+        }
 
-        return $this->getFilterManager()->getFiltersArray();
+        $request = is_array($request) ? new Request($request) : $request;
+        $manager = $this->getFilterManager();
+        $manager->setRequest($request);
+        $manager->createSession($request, FilterManager::DEFAULT_SESSION);
+
+        return $manager->getFiltersArray();
     }
 
     /**

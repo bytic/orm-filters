@@ -6,6 +6,7 @@ use Mockery as m;
 use Nip\Http\Request;
 use Nip\Records\Filters\Tests\AbstractTest;
 use Nip\Records\Filters\Tests\Fixtures\Models\RecordManager as Records;
+use Nyholm\Psr7\ServerRequest;
 
 /**
  * Class HasFiltersRecordsTraitTest
@@ -40,6 +41,17 @@ class HasFiltersRecordsTraitTest extends AbstractTest
 
         $filtersArray = $this->testRecords->requestFilters($request);
         self::assertSame($filtersArray, $params);
+    }
+
+    public function testRequestFiltersReplacesTheDefaultSession()
+    {
+        $manager = $this->testRecords->getFilterManager();
+        $manager->addFilter($manager->newFilter('Column\BasicFilter')->setField('title'));
+
+        self::assertSame(['title' => 'first'], $this->testRecords->requestFilters(['title' => 'first']));
+        $request = (new ServerRequest('GET', '/'))->withQueryParams(['title' => 'second']);
+        self::assertSame(['title' => 'second'], $this->testRecords->requestFilters($request));
+        self::assertSame([], $this->testRecords->requestFilters([]));
     }
 
     protected function setUp(): void
