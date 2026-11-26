@@ -7,6 +7,7 @@ use Nip\Records\Filters\Filters\Traits\HasManagerTrait;
 use Nip\Records\Filters\Filters\Traits\HasSessionTrait;
 use Nip\Utility\Traits\HasRequestTrait;
 use Psr\Http\Message\ServerRequestInterface;
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 /**
  * Class AbstractFilter
@@ -81,7 +82,7 @@ abstract class AbstractFilter implements FilterInterface
     }
 
     /**
-     * @return string|false
+     * @return string|int|float|false
      */
     public function getProcessedRequestValue()
     {
@@ -94,19 +95,36 @@ abstract class AbstractFilter implements FilterInterface
     }
 
     /**
-     * @return string|false
+     * @return mixed
      */
     public function getValueFromRequest()
     {
         $request = $this->getRequest();
         $name = $this->getRequestField();
-        if (empty($name)) {
+        if ($name === null || $name === '') {
             return false;
         }
-        if (!($request instanceof ServerRequestInterface)) {
-            return false;
+        if ($request instanceof SymfonyRequest) {
+            foreach ([$request->attributes, $request->query, $request->request] as $bag) {
+                if ($bag->has($name)) {
+                    return $bag->all()[$name];
+                }
+            }
+        } elseif ($request instanceof ServerRequestInterface) {
+            foreach ([$request->getAttributes(), $request->getQueryParams()] as $values) {
+                if (array_key_exists($name, $values)) {
+                    return $values[$name];
+                }
+            }
+
+            $body = $request->getParsedBody();
+            $body = is_object($body) ? get_object_vars($body) : $body;
+            if (is_array($body) && array_key_exists($name, $body)) {
+                return $body[$name];
+            }
         }
-        return $request->get($name, false);
+
+        return false;
     }
 
     /**
@@ -165,7 +183,7 @@ abstract class AbstractFilter implements FilterInterface
     public function isValidRequestValue($value)
     {
         if (is_numeric($value)) {
-            return $value;
+            return true;
         }
         if (is_string($value)) {
             return !empty(trim($value));
